@@ -1,0 +1,23 @@
+<Project>
+
+  <!-- Central package management: versions are declared once here, and
+       individual projects reference packages without a Version attribute.
+       This is what stops two layers silently pulling different EF Core
+       versions. -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+</Project>

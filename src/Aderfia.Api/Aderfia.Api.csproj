@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- The composition root: controllers, DI wiring, middleware.
+       This is the ONLY project that knows all the others exist. -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aderfia.Application\Aderfia.Application.csproj" />
+    <ProjectReference Include="..\Aderfia.Infrastructure\Aderfia.Infrastructure.csproj" />
+    <ProjectReference Include="..\Aderfia.Persistence\Aderfia.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+
+    <!-- `dotnet ef` looks for the design-time package on the STARTUP project,
+         not on the one holding the DbContext. Marked PrivateAssets so it is
+         a build-time-only dependency and never ships in the output. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

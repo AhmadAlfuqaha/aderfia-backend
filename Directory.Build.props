@@ -1,0 +1,25 @@
+<Project>
+
+  <!-- Settings shared by every project in the solution. Keeping them here
+       means a new layer picks up the same language version, nullability and
+       warning policy without anyone remembering to copy them. -->
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Nullability and API-contract mistakes should fail the build, not
+         accumulate as warnings nobody reads. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Company>Aderfia</Company>
+    <Product>Aderfia Commerce API</Product>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+</Project>

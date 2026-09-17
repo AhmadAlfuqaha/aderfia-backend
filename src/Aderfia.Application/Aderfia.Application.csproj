@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Use cases, DTOs and the abstractions the outer layers implement.
+       References Domain only, plus EF Core's abstractions so queries can be
+       expressed against IQueryable without depending on a provider. -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aderfia.Domain\Aderfia.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <!-- AsSplitQuery lives in RelationalQueryableExtensions, which ships in
+         the Relational assembly rather than the core one. The read services
+         rely on it to avoid cartesian explosion when including several
+         collections at once. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+
+</Project>

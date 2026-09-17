@@ -1,0 +1,46 @@
+# ---- Build output ----
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.dll
+*.pdb
+
+# ---- Databases ----
+# SQLite lives on a persistent volume in production and is generated locally
+# by seeding on first run. Never commit one: it is customer data.
+*.db
+*.db-shm
+*.db-wal
+
+# ---- Secrets & environment ----
+# The admin API key is supplied by `dotnet user-secrets` locally and by the
+# ADERFIA_ADMIN_KEY environment variable in production. It is never in a
+# tracked file. .env.production.example documents the shape and IS tracked.
+.env
+.env.*
+!.env.production.example
+secrets.json
+appsettings.Local.json
+appsettings.*.local.json
+ADMIN_KEY.txt
+
+# ---- Editors / IDE ----
+.vs/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo
+*.userprefs
+*.swp
+
+# ---- Logs ----
+[Ll]og/
+[Ll]ogs/
+*.log
+
+# ---- OS ----
+.DS_Store
+Thumbs.db

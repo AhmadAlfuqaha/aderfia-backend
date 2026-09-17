@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The innermost layer. It deliberately references NOTHING: no EF Core,
+       no ASP.NET, no packages at all. Entities and business rules must stay
+       independent of how they are stored or delivered. -->
+
+</Project>

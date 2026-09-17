@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Cross-cutting technical concerns: clock, image storage, email.
+       Anything that talks to the outside world but is not the database. -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aderfia.Application\Aderfia.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+  </ItemGroup>
+
+</Project>
