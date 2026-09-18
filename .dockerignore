@@ -1,0 +1,71 @@
+# =============================================================================
+# Build context exclusions.
+#
+# Two jobs: keep the context small, and make sure nothing local or sensitive
+# can be baked into a published image.
+#
+# Do NOT add src/ or wwwroot/ here. wwwroot carries the product photography the
+# API serves, and the app creates wwwroot/media at startup.
+# =============================================================================
+
+# ---- Build output ----
+# Host artifacts are for a different OS and would be overwritten anyway;
+# excluding them is what keeps the context from being hundreds of megabytes.
+**/bin/
+**/obj/
+artifacts/
+
+# ---- Version control ----
+.git/
+.gitignore
+.gitattributes
+
+# ---- Local databases ----
+# Development SQLite, and customer data. Production is Azure SQL.
+*.db
+*.db-shm
+*.db-wal
+
+# ---- Generated deployment artifacts ----
+# The idempotent migration script, applied to Azure SQL by hand. It has no
+# business inside a running container.
+schema.sql
+
+# ---- Secrets & environment ----
+# Nothing here is currently tracked, but an image must never be one stray
+# local file away from carrying a credential.
+.env
+.env.*
+secrets.json
+appsettings.Local.json
+appsettings.*.local.json
+ADMIN_KEY.txt
+*.pfx
+*.p12
+*.key
+*.pem
+
+# ---- Editors / IDE ----
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# ---- Docs & CI ----
+# Not needed to build or run.
+README.md
+DEPLOYMENT.md
+**/*.md
+.github/
+
+# ---- Docker's own files ----
+Dockerfile
+.dockerignore
+
+# ---- Logs & OS ----
+**/*.log
+[Ll]og/
+[Ll]ogs/
+.DS_Store
+Thumbs.db
