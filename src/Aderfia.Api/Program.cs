@@ -200,10 +200,25 @@ app.UseStaticFiles();
    side: the response is a normal 204 with no CORS headers, and nothing
    records WHY. One line here turns "the site cannot reach the API" into a
    check anyone can make from the deployment log. */
-app.Logger.LogInformation(
-    "CORS allows {Count} origin(s): {Origins}",
-    corsOrigins.Length,
-    string.Join(", ", corsOrigins));
+if (corsOrigins.Length == 0)
+{
+    /* Fail closed, but never quietly. An empty list rejects every browser
+       request while the API answers curl perfectly and reports itself
+       healthy — the storefront looks broken and the server looks fine.
+       Blank is always a mistake: a variable set to "" or to a name the
+       binder does not recognise. */
+    app.Logger.LogError(
+        "CORS is configured with NO allowed origins, so every browser request "
+        + "will be refused. Set Cors__AllowedOrigins__0 (note the __0 index) to "
+        + "the storefront's origin, with no trailing slash.");
+}
+else
+{
+    app.Logger.LogInformation(
+        "CORS allows {Count} origin(s): {Origins}",
+        corsOrigins.Length,
+        string.Join(", ", corsOrigins));
+}
 
 app.UseCors(StorefrontPolicy);
 app.UseResponseCaching();
