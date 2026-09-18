@@ -43,9 +43,14 @@ RUN dotnet publish src/Aderfia.Api/Aderfia.Api.csproj \
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 
-# Defaults, all overridable by Render's environment variables. Kestrel reads
-# ASPNETCORE_URLS; it does NOT read a bare PORT, so this has to be explicit.
-# 0.0.0.0 rather than localhost, or nothing outside the container can reach it.
+# The listening port is pinned in Program.cs with an explicit Kestrel Listen
+# call, which takes precedence over ASPNETCORE_URLS and ASPNETCORE_*_PORTS.
+# That is deliberate: an HTTPS endpoint inherited from any of those makes
+# Kestrel reach for the ASP.NET developer certificate, which no container
+# has, and the process dies inside BindAsync before serving a request.
+#
+# ASPNETCORE_URLS stays as documentation of the port; override it with PORT,
+# which the app reads and which hosts assign.
 ENV ASPNETCORE_URLS=http://0.0.0.0:10000 \
     ASPNETCORE_ENVIRONMENT=Production \
     DOTNET_RUNNING_IN_CONTAINER=true

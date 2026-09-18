@@ -86,6 +86,33 @@ if (behindProxy)
     });
 }
 
+/* HTTP-only binding outside Development.
+
+   Render, and any other platform that terminates TLS in front of the
+   container, forwards plain HTTP inwards. The container holds no certificate,
+   so an HTTPS endpoint is not merely unnecessary — it is fatal: Kestrel falls
+   back to the ASP.NET Core DEVELOPER certificate, which does not exist in the
+   image, and UseHttps throws inside BindAsync before a single request is
+   served. The process exits during startup.
+
+   Two things can introduce that endpoint without a line of code asking for it:
+   ASPNETCORE_HTTPS_PORTS, and an https:// entry anywhere in ASPNETCORE_URLS.
+   Both were reproduced against the published build.
+
+   An explicit Listen call is what makes this safe rather than merely tidy: it
+   takes precedence over ASPNETCORE_URLS and ASPNETCORE_*_PORTS entirely, so no
+   environment variable — inherited from a base image, added in a dashboard, or
+   set by the platform — can attach an HTTPS listener to this process.
+
+   PORT is honoured because hosts assign it; 10000 is the documented default.
+   Development is untouched, so the https profile in launchSettings.json still
+   runs against the local developer certificate. */
+if (!builder.Environment.IsDevelopment())
+{
+    var httpPort = builder.Configuration.GetValue<int?>("PORT") ?? 10000;
+    builder.WebHost.ConfigureKestrel(options => options.ListenAnyIP(httpPort));
+}
+
 /* Admin rate limiting. The admin API's only credential is a static key with
    no account and no lockout, so this is what stands between it and an
    offline-speed guessing attack. 60 requests a minute per IP is far above
@@ -136,8 +163,20 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+    // A response header, correct whenever the public origin is https.
     app.UseHsts();
-    app.UseHttpsRedirection();
+
+    /* Redirecting is the proxy's job when there is one. Behind Render the
+       edge already sends http to https, and this process listens on HTTP
+       only — so a redirect here can only point at a port it does not serve.
+       It would also fire on any internal request that arrives without
+       X-Forwarded-Proto, which is how platform health checks usually reach a
+       container: /health would answer 307 instead of 200 and the deploy would
+       be marked unhealthy.
+
+       Running with no proxy in front, the app owns its own TLS and should
+       still redirect, so this follows the same switch as the headers. */
+    if (!behindProxy) app.UseHttpsRedirection();
 }
 
 app.UseResponseCompression();
