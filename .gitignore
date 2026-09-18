@@ -26,6 +26,14 @@ appsettings.Local.json
 appsettings.*.local.json
 ADMIN_KEY.txt
 
+# ---- Generated deployment artifacts ----
+# The EF idempotent migration script, regenerated on demand with
+# `dotnet ef migrations script --idempotent`. It holds no secrets, but it goes
+# stale the moment a migration is added, and a stale copy in source control is
+# worse than none. Anchored with a leading slash so it only matches the root
+# file — deliberately NOT *.sql, so hand-written scripts can still be tracked.
+/schema.sql
+
 # ---- Editors / IDE ----
 .vs/
 .idea/
