@@ -50,13 +50,22 @@ builder.Services.AddSwaggerGen();
    a separate domain in production, so allowed origins are configuration. */
 const string StorefrontPolicy = "storefront";
 
+/* An Origin header never carries a trailing slash or padding, so "https://x/"
+   typed into a dashboard matches nothing and CORS fails silently: the browser
+   reports a network error, the server logs a clean 204, and nothing anywhere
+   says "origin rejected". Normalising here costs nothing and removes the most
+   common way to misconfigure this. */
+var corsOrigins = (builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                   ?? ["http://localhost:5173"])
+    .Where(o => !string.IsNullOrWhiteSpace(o))
+    .Select(o => o.Trim().TrimEnd('/'))
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray();
+
 builder.Services.AddCors(options =>
 {
-    var origins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                  ?? ["http://localhost:5173"];
-
     options.AddPolicy(StorefrontPolicy, policy => policy
-        .WithOrigins(origins)
+        .WithOrigins(corsOrigins)
         .AllowAnyHeader()
         .AllowAnyMethod()
         // Required for the guest-cart cookie to travel with requests.
@@ -187,6 +196,15 @@ app.UseStaticFiles();
 
 // CORS must run before caching, so a cached response is never replayed to an
 // origin that was not allowed to receive it.
+/* Logged because a rejected origin is otherwise invisible from the server
+   side: the response is a normal 204 with no CORS headers, and nothing
+   records WHY. One line here turns "the site cannot reach the API" into a
+   check anyone can make from the deployment log. */
+app.Logger.LogInformation(
+    "CORS allows {Count} origin(s): {Origins}",
+    corsOrigins.Length,
+    string.Join(", ", corsOrigins));
+
 app.UseCors(StorefrontPolicy);
 app.UseResponseCaching();
 
