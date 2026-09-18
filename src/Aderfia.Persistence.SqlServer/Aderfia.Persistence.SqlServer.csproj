@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- SQL Server migrations ONLY. No entities, no configurations, no runtime
+       logic — the model lives in Aderfia.Persistence and is shared.
+
+       This project exists because EF Core discovers migrations by scanning a
+       single assembly for [Migration]-attributed types. Two providers' worth
+       of migrations in one assembly are indistinguishable to that scan: EF
+       would find all of them and try to apply the SQLite ones to SQL Server.
+       A separate assembly per provider is the approach the EF team documents,
+       and the only one that keeps both sets applicable.
+
+       See AddPersistence in Aderfia.Persistence for how it is selected. -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Aderfia.Persistence\Aderfia.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

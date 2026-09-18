@@ -7,6 +7,7 @@
     <ProjectReference Include="..\Aderfia.Application\Aderfia.Application.csproj" />
     <ProjectReference Include="..\Aderfia.Infrastructure\Aderfia.Infrastructure.csproj" />
     <ProjectReference Include="..\Aderfia.Persistence\Aderfia.Persistence.csproj" />
+    <ProjectReference Include="..\Aderfia.Persistence.SqlServer\Aderfia.Persistence.SqlServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

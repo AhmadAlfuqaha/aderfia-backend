@@ -9,6 +9,12 @@ namespace Aderfia.Persistence;
 public static class DependencyInjection
 {
     /// <summary>
+    /// Assembly holding the SQL Server migrations. Kept as a constant so the
+    /// one place that has to change on a rename is findable.
+    /// </summary>
+    public const string SqlServerMigrationsAssembly = "Aderfia.Persistence.SqlServer";
+
+    /// <summary>
     /// Registers the DbContext and exposes it through the Application layer's
     /// <see cref="IAderfiaDbContext"/> abstraction — use cases never see the
     /// concrete context type.
@@ -28,7 +34,17 @@ public static class DependencyInjection
                 case "sqlserver":
                     options.UseSqlServer(connectionString, sql =>
                     {
-                        sql.MigrationsAssembly(typeof(AderfiaDbContext).Assembly.FullName);
+                        /* SQL Server's migrations live in their own assembly.
+                           EF finds migrations by scanning ONE assembly for
+                           [Migration] types and cannot tell providers apart,
+                           so the SQLite set and this set have to be in
+                           separate assemblies or EF would try to apply both.
+
+                           A string rather than typeof(...).Assembly: this
+                           project cannot reference Aderfia.Persistence.SqlServer,
+                           which references it. Renaming that assembly means
+                           changing this line. */
+                        sql.MigrationsAssembly(SqlServerMigrationsAssembly);
                         // Transient network faults should not surface as 500s.
                         sql.EnableRetryOnFailure(maxRetryCount: 3);
                     });
