@@ -1429,8 +1429,7 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.HasOne("Aderfia.Domain.Catalog.ProductImage", "HeroImage")
                         .WithMany()
-                        .HasForeignKey("HeroImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("HeroImageId");
 
                     b.Navigation("HeroImage");
                 });
@@ -1924,8 +1923,7 @@ namespace Aderfia.Persistence.Migrations
 
                     b.HasOne("Aderfia.Domain.Catalog.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("Aderfia.Domain.Catalog.ProductVariant", "ProductVariant")
                         .WithMany()

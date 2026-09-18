@@ -865,8 +865,7 @@ namespace Aderfia.Persistence.SqlServer.Migrations
                 table: "Collections",
                 column: "HeroImageId",
                 principalTable: "ProductImages",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_OrderItems_ProductVariants_ProductVariantId",
@@ -881,8 +880,7 @@ namespace Aderfia.Persistence.SqlServer.Migrations
                 table: "OrderItems",
                 column: "ProductId",
                 principalTable: "Products",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.SetNull);
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ProductBadges_Products_ProductId",

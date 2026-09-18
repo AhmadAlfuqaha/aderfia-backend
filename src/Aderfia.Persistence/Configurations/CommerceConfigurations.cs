@@ -247,13 +247,25 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
             price.Property(m => m.Currency).HasColumnName("UnitPriceCurrency").HasMaxLength(3);
         });
 
-        // Both links are optional and non-cascading: an order line survives
-        // the withdrawal of the product it refers to, because the descriptive
-        // fields above are a snapshot.
+        /* Both links are optional and non-cascading: an order line survives
+           the withdrawal of the product it refers to, because the descriptive
+           fields above are a snapshot.
+
+           ClientSetNull on the product link rather than SetNull, for the same
+           SQL Server reason as Collection.HeroImage. Deleting a Product could
+           reach OrderItems two ways — directly through this FK, and through
+           ProductVariants, which cascades from Products and is SET NULL from
+           here. SQL Server counts that as multiple cascade paths and refuses
+           to create the constraint.
+
+           Costs nothing: Product is ISoftDeletable, so SaveChangesAsync turns
+           every delete into IsDeleted = true and the row is never physically
+           removed. The database clause could never fire. The variant link
+           below keeps SetNull, which leaves exactly one path. */
         builder.HasOne(i => i.Product)
             .WithMany()
             .HasForeignKey(i => i.ProductId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         builder.HasOne(i => i.ProductVariant)
             .WithMany()

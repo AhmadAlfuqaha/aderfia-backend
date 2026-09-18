@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Aderfia.Persistence.SqlServer.Migrations
 {
     [DbContext(typeof(AderfiaDbContext))]
-    [Migration("20260918003400_InitialCreate")]
+    [Migration("20260918010148_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -1437,8 +1437,7 @@ namespace Aderfia.Persistence.SqlServer.Migrations
                 {
                     b.HasOne("Aderfia.Domain.Catalog.ProductImage", "HeroImage")
                         .WithMany()
-                        .HasForeignKey("HeroImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("HeroImageId");
 
                     b.Navigation("HeroImage");
                 });
@@ -1932,8 +1931,7 @@ namespace Aderfia.Persistence.SqlServer.Migrations
 
                     b.HasOne("Aderfia.Domain.Catalog.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ProductId");
 
                     b.HasOne("Aderfia.Domain.Catalog.ProductVariant", "ProductVariant")
                         .WithMany()

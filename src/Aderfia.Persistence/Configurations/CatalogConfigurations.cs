@@ -66,13 +66,36 @@ public class CollectionConfiguration : IEntityTypeConfiguration<Collection>
 
         builder.HasIndex(c => c.Slug).IsUnique();
 
+        /* ClientSetNull, not SetNull — the difference is the DATABASE clause,
+           not the behaviour.
+
+           Collections and ProductImages reference each other: a collection
+           cascade-deletes its Images below, and this FK pointed back the other
+           way with ON DELETE SET NULL. SQL Server refuses to create a schema
+           where two tables have cascading paths in both directions ("may cause
+           cycles or multiple cascade paths") and rejected the whole migration.
+           SQLite is permissive and never complained.
+
+           ClientSetNull emits ON DELETE NO ACTION, which breaks the cycle, and
+           keeps EF nulling HeroImageId on any Collection in the change tracker.
+           Nothing is lost: AdminMediaService.RemoveFileAndRowAsync already
+           loads the referencing collection and nulls HeroImageId by hand before
+           deleting an image, so the database clause was never what made this
+           work. HeroImageId is nullable, so a hero image can still be deleted
+           and its collection survives with no hero.
+
+           NOT Restrict (would block deleting an image in use), and emphatically
+           not ClientCascade, which would delete the COLLECTION when its hero
+           image is removed. */
         builder.HasOne(c => c.HeroImage)
             .WithMany()
             .HasForeignKey(c => c.HeroImageId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         // Supporting studies. A shadow FK keeps ProductImage free of a
-        // CollectionId it only sometimes needs.
+        // CollectionId it only sometimes needs. This is the direction that
+        // KEEPS its cascade: deleting a collection should take its studies
+        // with it.
         builder.HasMany(c => c.Images)
             .WithOne()
             .HasForeignKey("CollectionId")
