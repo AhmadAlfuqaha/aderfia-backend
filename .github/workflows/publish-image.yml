@@ -1,0 +1,129 @@
+# =============================================================================
+# Build the API image and publish it to GitHub Container Registry.
+#
+# GHCR rather than Azure Container Registry: ACR has no free tier, and the
+# image is the only artifact Azure Container Apps needs. GITHUB_TOKEN is minted
+# per run by Actions, so there is no credential to store anywhere.
+#
+# Nothing secret belongs here. The connection string, admin key and CORS
+# origins are read from the environment at RUNTIME and are set on the hosting
+# platform — the image is identical for every environment.
+# =============================================================================
+
+name: Publish container image
+
+on:
+  push:
+    branches: [main]
+  # So a rebuild can be triggered without an empty commit.
+  workflow_dispatch:
+
+env:
+  # Lowercase on purpose: GHCR rejects capitals in a repository name, and the
+  # owner is "AhmadAlfuqaha". Hardcoded rather than derived from
+  # github.repository_owner for exactly that reason.
+  IMAGE: ghcr.io/ahmadalfuqaha/aderfia-api
+
+jobs:
+  publish:
+    name: Build, smoke test and push
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      # The only elevated scope needed; GITHUB_TOKEN gets nothing else.
+      packages: write
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Built and loaded locally FIRST, so a broken image is caught before it
+      # is published rather than after Azure tries to run it.
+      - name: Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          load: true
+          push: false
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Requirement: confirm the runtime image still starts Aderfia.Api.
+      # A build that succeeds proves the code compiles, not that the container
+      # boots — the two have diverged here before, when an inherited HTTPS
+      # endpoint made Kestrel die inside BindAsync on a perfectly good image.
+      #
+      # No database is needed: migrations do not run on start in Production,
+      # so the app serves /health without ever opening a connection.
+      - name: Smoke test — the container must actually serve /health
+        run: |
+          set -euo pipefail
+
+          docker run --detach --name aderfia-smoke \
+            --publish 10000:10000 \
+            "${IMAGE}:${GITHUB_SHA}"
+
+          echo "Waiting for the app to bind..."
+          for i in $(seq 1 30); do
+            if curl --silent --fail --max-time 3 http://localhost:10000/health > /tmp/health.json; then
+              echo "Responded after ${i}s:"
+              cat /tmp/health.json
+              grep -q '"healthy"' /tmp/health.json
+              echo ""
+              echo "--- container log ---"
+              docker logs aderfia-smoke
+              docker rm --force aderfia-smoke > /dev/null
+              exit 0
+            fi
+            sleep 1
+          done
+
+          echo "::error::The container never served /health. Log follows."
+          docker logs aderfia-smoke
+          docker rm --force aderfia-smoke > /dev/null
+          exit 1
+
+      # Deliberately after the smoke test: nothing reaches the registry until
+      # the image has proved it runs.
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          # Minted for this run by Actions. Not a stored secret.
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Re-runs the same build; every layer is a cache hit, so this is a push
+      # rather than a rebuild.
+      - name: Push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Summary
+        run: |
+          {
+            echo "### Image published"
+            echo ""
+            echo '```'
+            echo "${IMAGE}:latest"
+            echo "${IMAGE}:${GITHUB_SHA}"
+            echo '```'
+            echo ""
+            echo "Smoke test passed: the container served /health before the push."
+          } >> "$GITHUB_STEP_SUMMARY"
