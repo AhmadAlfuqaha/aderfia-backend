@@ -249,10 +249,50 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy" }))
    App replicas starting at once cannot apply the same migration twice.
 
    The trade to know about: a migration reaches production the moment its
-   commit does. Review them as carefully as you would a manual run. */
+   commit does. Review them as carefully as you would a manual run.
+
+   Two guards, both learned the hard way when this first went out:
+
+   ONLY WITH A REAL PROVIDER. Database:Provider defaults to Sqlite, so an
+   image started with no environment at all tries to create aderfia.db in the
+   working directory — which the non-root user cannot write, so EF throws and
+   the process dies before it binds. That is precisely what the deploy's
+   /health smoke test does: `docker run` the image with nothing configured.
+   There is no database there and nothing to migrate.
+
+   NEVER FATAL. This process is the whole API. If SQL Server is briefly
+   unreachable while a replica starts, crash-looping turns a blip into an
+   outage that cannot recover on its own, and Container Apps will keep
+   restarting into the same failure. Serving while saying loudly what is
+   wrong is strictly better: /health stays honest that the process is up, the
+   endpoints that need the database fail on their own terms, and the log
+   names the cause. */
 if (app.Environment.IsProduction())
 {
-    await app.Services.InitialiseDatabaseAsync(seed: false);
+    var provider = app.Configuration["Database:Provider"];
+
+    if (string.Equals(provider, "SqlServer", StringComparison.OrdinalIgnoreCase))
+    {
+        try
+        {
+            await app.Services.InitialiseDatabaseAsync(seed: false);
+            app.Logger.LogInformation("Database schema is up to date.");
+        }
+        catch (Exception ex)
+        {
+            app.Logger.LogError(
+                ex,
+                "Database migration failed during startup. The API is still serving, but the "
+                + "schema may be out of date and data endpoints will fail until this is resolved.");
+        }
+    }
+    else
+    {
+        app.Logger.LogWarning(
+            "No SQL Server provider is configured (Database:Provider = {Provider}), so no "
+            + "migrations ran. Expected when smoke-testing the image; a mistake in production.",
+            provider ?? "unset");
+    }
 }
 else
 {
