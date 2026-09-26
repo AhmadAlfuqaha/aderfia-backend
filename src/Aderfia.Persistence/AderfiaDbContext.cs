@@ -4,6 +4,7 @@ using Aderfia.Domain.Catalog;
 using Aderfia.Domain.Common;
 using Aderfia.Domain.Customers;
 using Aderfia.Domain.Ordering;
+using Aderfia.Domain.Site;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -37,6 +38,9 @@ public class AderfiaDbContext(DbContextOptions<AderfiaDbContext> options)
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderItem> OrderItems => Set<OrderItem>();
     public DbSet<ShippingMethod> ShippingMethods => Set<ShippingMethod>();
+
+    // ---- Site ----
+    public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

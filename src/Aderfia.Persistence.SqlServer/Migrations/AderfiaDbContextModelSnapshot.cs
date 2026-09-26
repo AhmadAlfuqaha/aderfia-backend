@@ -1398,6 +1398,33 @@ namespace Aderfia.Persistence.SqlServer.Migrations
                     b.ToTable("ShippingMethods", (string)null);
                 });
 
+            modelBuilder.Entity("Aderfia.Domain.Site.SiteSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("HomeHeroImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("HomeHeroProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeHeroImageId");
+
+                    b.HasIndex("HomeHeroProductId");
+
+                    b.ToTable("SiteSettings", (string)null);
+                });
+
             modelBuilder.Entity("CollectionProduct", b =>
                 {
                     b.Property<Guid>("CollectionsId")
@@ -1940,6 +1967,23 @@ namespace Aderfia.Persistence.SqlServer.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("ProductVariant");
+                });
+
+            modelBuilder.Entity("Aderfia.Domain.Site.SiteSettings", b =>
+                {
+                    b.HasOne("Aderfia.Domain.Catalog.ProductImage", "HomeHeroImage")
+                        .WithMany()
+                        .HasForeignKey("HomeHeroImageId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Aderfia.Domain.Catalog.Product", "HomeHeroProduct")
+                        .WithMany()
+                        .HasForeignKey("HomeHeroProductId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("HomeHeroImage");
+
+                    b.Navigation("HomeHeroProduct");
                 });
 
             modelBuilder.Entity("CollectionProduct", b =>

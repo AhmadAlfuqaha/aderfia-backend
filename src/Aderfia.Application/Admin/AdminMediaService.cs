@@ -222,6 +222,11 @@ public sealed class AdminMediaService(
         var collection = await db.Collections.FirstOrDefaultAsync(c => c.HeroImageId == image.Id, ct);
         if (collection is not null) collection.HeroImageId = null;
 
+        // The homepage hero card points at an image too, and its FK is
+        // NoAction like the two above — so it has to be released the same way.
+        var settings = await db.SiteSettings.FirstOrDefaultAsync(s => s.HomeHeroImageId == image.Id, ct);
+        if (settings is not null) settings.HomeHeroImageId = null;
+
         await storage.DeleteAsync(image.StorageKey, ct);
         db.ProductImages.Remove(image);
     }

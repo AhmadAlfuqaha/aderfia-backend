@@ -4,67 +4,75 @@ using System.Collections.Generic;
 using Aderfia.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Aderfia.Persistence.Migrations
+namespace Aderfia.Persistence.SqlServer.Migrations
 {
     [DbContext(typeof(AderfiaDbContext))]
-    partial class AderfiaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260926140319_AddSiteSettings")]
+    partial class AddSiteSettings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Aderfia.Domain.Catalog.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("DeletedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("ImageId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsFeatured")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<Guid?>("ParentId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(160)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(160)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "Aderfia.Domain.Catalog.Category.Description#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(2000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(2000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionEn");
                         });
 
@@ -73,13 +81,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("MetaDescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("MetaDescriptionEn");
                         });
 
@@ -88,13 +96,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("MetaTitleAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("MetaTitleEn");
                         });
 
@@ -103,13 +111,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(160)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(160)")
                                 .HasColumnName("NameAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(160)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(160)")
                                 .HasColumnName("NameEn");
                         });
 
@@ -118,13 +126,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(240)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(240)")
                                 .HasColumnName("TaglineAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(240)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(240)")
                                 .HasColumnName("TaglineEn");
                         });
 
@@ -146,55 +154,55 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("DeletedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("EndsAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("EndsAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("HeroImageId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsFeatured")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPublished")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(160)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(160)");
 
-                    b.Property<long?>("StartsAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("StartsAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "Aderfia.Domain.Catalog.Collection.Description#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(2000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(2000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(2000)")
                                 .HasColumnName("DescriptionEn");
                         });
 
@@ -203,13 +211,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("MetaDescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("MetaDescriptionEn");
                         });
 
@@ -218,13 +226,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("MetaTitleAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("MetaTitleEn");
                         });
 
@@ -233,13 +241,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(240)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(240)")
                                 .HasColumnName("SubtitleAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(240)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(240)")
                                 .HasColumnName("SubtitleEn");
                         });
 
@@ -248,13 +256,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(160)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(160)")
                                 .HasColumnName("TitleAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(160)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(160)")
                                 .HasColumnName("TitleEn");
                         });
 
@@ -272,58 +280,58 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("DefaultVariantId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("DeletedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsFeatured")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsPublished")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
-                    b.Property<long?>("PublishedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("PublishedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<double?>("RatingAverage")
-                        .HasColumnType("REAL");
+                        .HasColumnType("float");
 
                     b.Property<int>("RatingCount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("CareInstructions", "Aderfia.Domain.Catalog.Product.CareInstructions#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(1000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(1000)")
                                 .HasColumnName("CareAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(1000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(1000)")
                                 .HasColumnName("CareEn");
                         });
 
@@ -332,13 +340,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(4000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(4000)")
                                 .HasColumnName("DescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(4000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(4000)")
                                 .HasColumnName("DescriptionEn");
                         });
 
@@ -347,13 +355,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("MetaDescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("MetaDescriptionEn");
                         });
 
@@ -362,13 +370,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("MetaTitleAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("MetaTitleEn");
                         });
 
@@ -377,13 +385,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("NameAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("NameEn");
                         });
 
@@ -392,13 +400,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(4000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(4000)")
                                 .HasColumnName("StoryAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(4000)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(4000)")
                                 .HasColumnName("StoryEn");
                         });
 
@@ -407,13 +415,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(240)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(240)")
                                 .HasColumnName("TaglineAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(240)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(240)")
                                 .HasColumnName("TaglineEn");
                         });
 
@@ -437,35 +445,35 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Tone")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Label", "Aderfia.Domain.Catalog.ProductBadge.Label#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(40)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(40)")
                                 .HasColumnName("LabelAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(40)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(40)")
                                 .HasColumnName("LabelEn");
                         });
 
@@ -480,53 +488,53 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BlurDataUrl")
                         .HasMaxLength(4000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(4000)");
 
                     b.Property<Guid?>("CollectionId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Height")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Role")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("StorageKey")
                         .IsRequired()
                         .HasMaxLength(512)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(512)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Width")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.ComplexProperty<Dictionary<string, object>>("AltText", "Aderfia.Domain.Catalog.ProductImage.AltText#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("AltTextAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("AltTextEn");
                         });
 
@@ -543,32 +551,32 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "Aderfia.Domain.Catalog.ProductMaterial.Name#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("NameAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("NameEn");
                         });
 
@@ -586,32 +594,32 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "Aderfia.Domain.Catalog.ProductOption.Name#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(80)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(80)")
                                 .HasColumnName("NameAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(80)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(80)")
                                 .HasColumnName("NameEn");
                         });
 
@@ -626,36 +634,36 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("OptionId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Swatch")
                         .HasMaxLength(9)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(9)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Value", "Aderfia.Domain.Catalog.ProductOptionValue.Value#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("ValueAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("ValueEn");
                         });
 
@@ -670,22 +678,22 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RelatedProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -701,32 +709,32 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Group", "Aderfia.Domain.Catalog.ProductSpecification.Group#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(80)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(80)")
                                 .HasColumnName("GroupAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(80)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(80)")
                                 .HasColumnName("GroupEn");
                         });
 
@@ -735,13 +743,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("LabelAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("LabelEn");
                         });
 
@@ -750,13 +758,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(600)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(600)")
                                 .HasColumnName("ValueAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(600)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(600)")
                                 .HasColumnName("ValueEn");
                         });
 
@@ -771,53 +779,53 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long?>("CompareAtAmount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Sku")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(64)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Name", "Aderfia.Domain.Catalog.ProductVariant.Name#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("NameAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("NameEn");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Price", "Aderfia.Domain.Catalog.ProductVariant.Price#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("PriceAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("PriceCurrency");
                         });
 
@@ -834,10 +842,10 @@ namespace Aderfia.Persistence.Migrations
             modelBuilder.Entity("Aderfia.Domain.Catalog.VariantOptionValue", b =>
                 {
                     b.Property<Guid>("VariantId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OptionValueId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("VariantId", "OptionValueId");
 
@@ -850,64 +858,64 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(120)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(120)");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(120)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(120)");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsDefaultBilling")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDefaultShipping")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Line1")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Line2")
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(40)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("PostalCode")
                         .IsRequired()
                         .HasMaxLength(24)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<string>("Region")
                         .HasMaxLength(120)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(120)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -920,28 +928,28 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AnonymousId")
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(64)");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(3)");
 
-                    b.Property<long>("ExpiresAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -958,33 +966,33 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CartId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("ProductVariantId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("UnitPrice", "Aderfia.Domain.Customers.CartItem.UnitPrice#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("UnitPriceAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("UnitPriceCurrency");
                         });
 
@@ -1002,43 +1010,43 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("AcceptsMarketing")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long?>("DeletedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(320)");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("IdentityUserId")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(100)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(40)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(40)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -1054,19 +1062,19 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -1082,147 +1090,147 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("CancelledAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("CancelledAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Currency")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("CustomerNote")
                         .HasMaxLength(1000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(1000)");
 
-                    b.Property<long?>("DeliveredAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("DeliveredAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(320)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(320)");
 
                     b.Property<string>("InternalNote")
                         .HasMaxLength(2000)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(2000)");
 
-                    b.Property<long?>("PaidAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("PaidAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PaymentIntentId")
                         .HasMaxLength(128)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("PaymentProvider")
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(32)");
 
-                    b.Property<long>("PlacedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("PlacedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Reference")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(32)");
 
-                    b.Property<long?>("ShippedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("ShippedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("ShippingMethodId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ShippingMethodName")
                         .IsRequired()
                         .HasMaxLength(120)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(120)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(32)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("TrackingNumber")
                         .HasMaxLength(120)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(120)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.ComplexProperty<Dictionary<string, object>>("DiscountTotal", "Aderfia.Domain.Ordering.Order.DiscountTotal#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("DiscountTotalAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("DiscountTotalCurrency");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("GrandTotal", "Aderfia.Domain.Ordering.Order.GrandTotal#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("GrandTotalAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("GrandTotalCurrency");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("ShippingTotal", "Aderfia.Domain.Ordering.Order.ShippingTotal#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("ShippingTotalAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("ShippingTotalCurrency");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Subtotal", "Aderfia.Domain.Ordering.Order.Subtotal#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("SubtotalAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("SubtotalCurrency");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("TaxTotal", "Aderfia.Domain.Ordering.Order.TaxTotal#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("TaxTotalAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("TaxTotalCurrency");
                         });
 
@@ -1246,55 +1254,55 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("ImageStorageKey")
                         .HasMaxLength(512)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(512)");
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid?>("ProductVariantId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Sku")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(64)");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("VariantName")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(200)");
 
                     b.ComplexProperty<Dictionary<string, object>>("UnitPrice", "Aderfia.Domain.Ordering.OrderItem.UnitPrice#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("UnitPriceAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("UnitPriceCurrency");
                         });
 
@@ -1313,35 +1321,35 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<long?>("FreeAboveSubtotal")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("bit");
 
                     b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "Aderfia.Domain.Ordering.ShippingMethod.Description#LocalizedText", b1 =>
                         {
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("DescriptionAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(400)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(400)")
                                 .HasColumnName("DescriptionEn");
                         });
 
@@ -1350,13 +1358,13 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("EstimateAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("EstimateEn");
                         });
 
@@ -1365,26 +1373,26 @@ namespace Aderfia.Persistence.Migrations
                             b1.Property<string>("Ar")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("NameAr");
 
                             b1.Property<string>("En")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("NameEn");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Price", "Aderfia.Domain.Ordering.ShippingMethod.Price#Money", b1 =>
                         {
                             b1.Property<long>("Amount")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bigint")
                                 .HasColumnName("PriceAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(3)")
                                 .HasColumnName("PriceCurrency");
                         });
 
@@ -1397,19 +1405,19 @@ namespace Aderfia.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<Guid?>("HomeHeroImageId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("HomeHeroProductId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("INTEGER");
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -1423,10 +1431,10 @@ namespace Aderfia.Persistence.Migrations
             modelBuilder.Entity("CollectionProduct", b =>
                 {
                     b.Property<Guid>("CollectionsId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductsId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CollectionsId", "ProductsId");
 
@@ -1477,36 +1485,36 @@ namespace Aderfia.Persistence.Migrations
                     b.OwnsOne("Aderfia.Domain.Common.Dimensions", "Dimensions", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal?>("Depth")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<decimal?>("Diameter")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<decimal?>("FrameWidth")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<decimal?>("Height")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<string>("Unit")
                                 .IsRequired()
                                 .HasMaxLength(8)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("nvarchar(8)");
 
                             b1.Property<decimal?>("WeightKg")
                                 .HasPrecision(9, 3)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,3)");
 
                             b1.Property<decimal?>("Width")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.HasKey("ProductId");
 
@@ -1624,34 +1632,34 @@ namespace Aderfia.Persistence.Migrations
                     b.OwnsOne("Aderfia.Domain.Catalog.Inventory", "Inventory", b1 =>
                         {
                             b1.Property<Guid>("ProductVariantId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<bool>("AllowBackorder")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bit")
                                 .HasColumnName("AllowBackorder");
 
                             b1.Property<bool>("IsMadeToOrder")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("bit")
                                 .HasColumnName("IsMadeToOrder");
 
                             b1.Property<string>("LeadTimeAr")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("LeadTimeAr");
 
                             b1.Property<string>("LeadTimeEn")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("LeadTimeEn");
 
                             b1.Property<int>("LowStockThreshold")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("int")
                                 .HasColumnName("LowStockThreshold");
 
                             b1.Property<int>("Quantity")
-                                .HasColumnType("INTEGER")
+                                .HasColumnType("int")
                                 .HasColumnName("StockQuantity");
 
                             b1.HasKey("ProductVariantId");
@@ -1665,36 +1673,36 @@ namespace Aderfia.Persistence.Migrations
                     b.OwnsOne("Aderfia.Domain.Common.Dimensions", "Dimensions", b1 =>
                         {
                             b1.Property<Guid>("ProductVariantId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal?>("Depth")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<decimal?>("Diameter")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<decimal?>("FrameWidth")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<decimal?>("Height")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.Property<string>("Unit")
                                 .IsRequired()
                                 .HasMaxLength(8)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("nvarchar(8)");
 
                             b1.Property<decimal?>("WeightKg")
                                 .HasPrecision(9, 3)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,3)");
 
                             b1.Property<decimal?>("Width")
                                 .HasPrecision(9, 2)
-                                .HasColumnType("TEXT");
+                                .HasColumnType("decimal(9,2)");
 
                             b1.HasKey("ProductVariantId");
 
@@ -1804,57 +1812,57 @@ namespace Aderfia.Persistence.Migrations
                     b.OwnsOne("Aderfia.Domain.Ordering.OrderAddress", "BillingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("BillingCity");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("BillingCountry");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(100)")
                                 .HasColumnName("BillingFirstName");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(100)")
                                 .HasColumnName("BillingLastName");
 
                             b1.Property<string>("Line1")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("BillingLine1");
 
                             b1.Property<string>("Line2")
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("BillingLine2");
 
                             b1.Property<string>("Phone")
                                 .HasMaxLength(40)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(40)")
                                 .HasColumnName("BillingPhone");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
                                 .HasMaxLength(24)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(24)")
                                 .HasColumnName("BillingPostalCode");
 
                             b1.Property<string>("Region")
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("BillingRegion");
 
                             b1.HasKey("OrderId");
@@ -1868,57 +1876,57 @@ namespace Aderfia.Persistence.Migrations
                     b.OwnsOne("Aderfia.Domain.Ordering.OrderAddress", "ShippingAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
-                                .HasColumnType("TEXT");
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("City")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("ShippingCity");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("ShippingCountry");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(100)")
                                 .HasColumnName("ShippingFirstName");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(100)")
                                 .HasColumnName("ShippingLastName");
 
                             b1.Property<string>("Line1")
                                 .IsRequired()
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("ShippingLine1");
 
                             b1.Property<string>("Line2")
                                 .HasMaxLength(200)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(200)")
                                 .HasColumnName("ShippingLine2");
 
                             b1.Property<string>("Phone")
                                 .HasMaxLength(40)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(40)")
                                 .HasColumnName("ShippingPhone");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
                                 .HasMaxLength(24)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(24)")
                                 .HasColumnName("ShippingPostalCode");
 
                             b1.Property<string>("Region")
                                 .HasMaxLength(120)
-                                .HasColumnType("TEXT")
+                                .HasColumnType("nvarchar(120)")
                                 .HasColumnName("ShippingRegion");
 
                             b1.HasKey("OrderId");

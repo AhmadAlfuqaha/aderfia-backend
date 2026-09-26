@@ -230,9 +230,31 @@ app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" }))
    .WithTags("Diagnostics");
 
-/* Migrate and seed outside production. In production, migrations run as a
-   deliberate deployment step rather than on process start. */
-if (!app.Environment.IsProduction())
+/* Database bring-up.
+
+   Outside production: migrate AND seed, so a fresh clone has a catalogue to
+   look at without anyone running a command.
+
+   In production: migrate, never seed. This used to be skipped entirely, with
+   migrations run by hand as a deploy step — which is the safer arrangement in
+   principle and the wrong one here in practice: this app deploys itself from
+   a GitHub workflow with no migration step in it, so a release carrying a
+   schema change would start serving against a database that does not have it
+   and 500 on the new endpoint.
+
+   Seeding stays off, because that WOULD touch real data. Migrating does not:
+   EF applies only the migrations recorded as pending in __EFMigrationsHistory
+   and no-ops when there are none, which is every deploy that changes no
+   schema. EF Core 9 takes a database lock around this, so several Container
+   App replicas starting at once cannot apply the same migration twice.
+
+   The trade to know about: a migration reaches production the moment its
+   commit does. Review them as carefully as you would a manual run. */
+if (app.Environment.IsProduction())
+{
+    await app.Services.InitialiseDatabaseAsync(seed: false);
+}
+else
 {
     await app.Services.InitialiseDatabaseAsync(seed: true);
 }

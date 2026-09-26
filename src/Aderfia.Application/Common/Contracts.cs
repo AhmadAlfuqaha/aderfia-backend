@@ -2,6 +2,7 @@ using Aderfia.Domain.Catalog;
 using Aderfia.Domain.Common;
 using Aderfia.Domain.Customers;
 using Aderfia.Domain.Ordering;
+using Aderfia.Domain.Site;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aderfia.Application.Common;
@@ -39,6 +40,8 @@ public interface IAderfiaDbContext
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
     DbSet<ShippingMethod> ShippingMethods { get; }
+
+    DbSet<SiteSettings> SiteSettings { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

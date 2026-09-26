@@ -3,6 +3,7 @@ using Aderfia.Application.Carts;
 using Aderfia.Application.Catalog;
 using Aderfia.Application.Customers;
 using Aderfia.Application.Orders;
+using Aderfia.Application.Site;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Aderfia.Application;
@@ -19,6 +20,7 @@ public static class DependencyInjection
         services.AddScoped<ICartService, CartService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IWishlistService, WishlistService>();
+        services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 
         // ---- Admin write side ----
         services.AddScoped<IAdminProductService, AdminProductService>();
